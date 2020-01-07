@@ -1,0 +1,70 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+#include <string.h>
+
+using std::cout;
+using std::cin;
+using std::ifstream;
+using std::ofstream;
+using std::string;
+using std::endl;
+
+void printfileread(ifstream& fin);
+void fileanalyze(char filename[]);
+
+int main() {
+	char file1[] = "mystery0.txt";
+	char file2[] = "mystery1.txt";
+	//printfileread(fin);
+	fileanalyze(file1);
+	fileanalyze(file2);
+	return 0;
+}
+void fileanalyze(char filename[]) {
+	ifstream fin;
+	fin.open(filename);
+	const int SIZE=34;
+	const int MAX=10000;
+	char words[MAX][SIZE];
+	int wordscount[MAX] = { 0 };
+	char word[SIZE];
+	int NWindex=0;
+	float long averagelength=0;
+	int totalwords=0;
+	float hapaxlegomana=0;
+	float typetokrat;
+	if (fin.is_open()) {
+		while (!fin.eof()) {
+			fin >> word;
+			totalwords++;
+			averagelength += strlen(word);
+			for (int i = 0; i < strlen(word); i++) {
+				word[i] = tolower(word[i]);
+			}
+			for (int i = 0; i < MAX; i++) {
+				if (i == (MAX - 1)) {
+					strcpy_s(words[NWindex],word);
+					wordscount[NWindex]++;NWindex++;
+				}
+				else if (strcmp(word,words[i])==0) {
+					wordscount[i]++;break;
+				}
+			}
+		}
+	}
+	fin.close();
+	for (int i = 0; i < NWindex; i++) {
+		if (wordscount[i] == 1) {
+			hapaxlegomana++;
+		}
+	}
+	typetokrat = ((float)NWindex / (float)totalwords); 
+	hapaxlegomana /= totalwords; 
+	averagelength /= totalwords;
+	cout << "Processing file: " << filename << endl;
+	cout << "Amount of unique words: " << NWindex << endl; 
+	cout << "The average word length is : " << averagelength << endl;
+	cout << "The type token ratio is : " << typetokrat << endl;
+	cout << "The Hapax Legomana ratio is : " << hapaxlegomana << endl;
+}
