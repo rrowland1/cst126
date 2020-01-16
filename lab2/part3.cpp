@@ -36,7 +36,7 @@ int main() {
 	strcpy_s(infileName, sizeof("food.txt"), "food.txt");
 	strcpy_s(outfileName, sizeof("outfood.txt"), "outfood.txt");
 	loadFromFile(pantry, &numIngredients, infileName);
-	displayIngredients(pantry, numIngredients);
+	displayIngredients(pantry, numIngredients); 
 	cout << "Enter the ingredient to add: ";
 	cin >> addIng;
 	addIngredient(pantry, &numIngredients, addIng);
