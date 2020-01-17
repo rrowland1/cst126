@@ -39,6 +39,7 @@ int main() {
 	cout << "Enter the ingredient to add: ";
 	cin >> addIng;
 	addIngredient(pantry, &numIngredients, addIng);
+	displayIngredients(pantry, numIngredients);
 	cout << "Enter the ingredient to search: ";
 	cin >> searchIng;
 	searchIngredients(pantry, numIngredients, searchIng);
@@ -47,9 +48,11 @@ int main() {
 	cout << "Enter the ingredient to replace it with: ";
 	cin >> replaceIng;
 	changeIngredient(pantry, numIngredients, changeIng, replaceIng);
+	displayIngredients(pantry, numIngredients);
 	cout << "Enter the ingredient to remove: ";
 	cin >> removeIng;
 	removeIngredient(pantry, &numIngredients, removeIng);
+	displayIngredients(pantry, numIngredients);
 	cout << "Saving to file..." << endl;
 	saveToFile(pantry, numIngredients, outfileName);
 	for (int i = 0; i < numIngredients; ++i)
@@ -60,6 +63,8 @@ int main() {
 	delete[] searchIng;
 	delete[] addIng;
 	delete[] replaceIng;
+	delete[] removeIng;
+	delete[] changeIng;
 
 	return 0;
 }
@@ -78,6 +83,7 @@ int loadFromFile(char** pStrs, int* numIngredients, char* fileName) {
 	fin.close();
 	return 0;
 }
+
 int displayIngredients(char** pStrs, int numIngredients) {
 	for (int i = 0; i < numIngredients; i++) {
 		cout << pStrs[i] << endl;
@@ -114,25 +120,31 @@ int saveToFile(char** pStrs, int numIngredients, char* fileName) {
 }
 int changeIngredient(char** pStrs, int numIngredients, char* oldIngredient, char* newIngredient) {
 	for (int i = 0; i < numIngredients; i++) {
-		if (!strcmp(pStrs[i], oldIngredient))
-			strcpy_s(pStrs[i], strlen(pStrs[i])+1,newIngredient);
+		if (!strcmp(pStrs[i], oldIngredient)) {
+			pStrs[i] = new char[strlen(newIngredient) + 1];
+			strcpy_s(pStrs[i], strlen(newIngredient) + 1, newIngredient);
+		}
 	}
 	delete[] oldIngredient;
 	return 0;
 }
 int removeIngredient(char** pStrs, int* numIngredients, char* removeIngredient) {
 	bool remove = false;
-	char* currIng = new char[INGSIZE];
+	//char* currIng = new char[INGSIZE];
 	for (int i = 0; i < *numIngredients; i++) {
-		strcpy_s(currIng, strlen(pStrs[i])+1, pStrs[i]);
 		remove = !strcmp(pStrs[i], removeIngredient);
-		if (remove) {
-			strcpy_s(pStrs[i], strlen(pStrs[i])+1, pStrs[i+1]);
+		if (i==(*numIngredients - 1)) {
+			pStrs[i] = new char[strlen("") + 1];
+			strcpy_s(pStrs[i], strlen("") + 1, "");
+		}
+		else if (remove||!((*numIngredients-1)==i)) {
+			pStrs[i] = new char[strlen(pStrs[i+1]) + 1];
+			strcpy_s(pStrs[i], strlen(pStrs[i + 1]) + 1, pStrs[i + 1]);
 		}
 	}
 	if (remove)
-		--*numIngredients;
+		--* numIngredients;
 	delete[] removeIngredient;
-	delete[] currIng;
+	//delete[] currIng;
 	return 0;
 }
