@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include "conio.h"
 #include <crtdbg.h>
 
 using std::ifstream;
@@ -36,7 +35,7 @@ int main() {
 	strcpy_s(infileName, sizeof("food.txt"), "food.txt");
 	strcpy_s(outfileName, sizeof("outfood.txt"), "outfood.txt");
 	loadFromFile(pantry, &numIngredients, infileName);
-	displayIngredients(pantry, numIngredients); 
+	displayIngredients(pantry, numIngredients);
 	cout << "Enter the ingredient to add: ";
 	cin >> addIng;
 	addIngredient(pantry, &numIngredients, addIng);
@@ -89,7 +88,6 @@ int addIngredient(char** pStrs, int* numIngredients, char* addedIngredient) {
 	pStrs[*numIngredients] = new char[strlen(addedIngredient) + 1];
 	strcpy_s(pStrs[*numIngredients], strlen(addedIngredient) + 1, addedIngredient);
 	++* numIngredients;
-	delete[] addedIngredient;
 	return 0;
 }
 int searchIngredients(char** pStrs, int numIngredients, char* checkIngredient) {
@@ -117,25 +115,24 @@ int saveToFile(char** pStrs, int numIngredients, char* fileName) {
 int changeIngredient(char** pStrs, int numIngredients, char* oldIngredient, char* newIngredient) {
 	for (int i = 0; i < numIngredients; i++) {
 		if (!strcmp(pStrs[i], oldIngredient))
-			strcpy_s(pStrs[i], strlen(pStrs[i]),newIngredient);
+			strcpy_s(pStrs[i], strlen(pStrs[i])+1,newIngredient);
 	}
 	delete[] oldIngredient;
 	return 0;
 }
 int removeIngredient(char** pStrs, int* numIngredients, char* removeIngredient) {
 	bool remove = false;
+	char* currIng = new char[INGSIZE];
 	for (int i = 0; i < *numIngredients; i++) {
-		if (!strcmp(pStrs[i], removeIngredient))
-			remove = true;
-		if (i == (*numIngredients - 1)) {
-			strcpy_s(pStrs[i], strlen(pStrs[i]), "");
-		}
-		else if (remove) {
-			strcpy_s(pStrs[i], strlen(pStrs[i]), pStrs[i+1]);
+		strcpy_s(currIng, strlen(pStrs[i])+1, pStrs[i]);
+		remove = !strcmp(pStrs[i], removeIngredient);
+		if (remove) {
+			strcpy_s(pStrs[i], strlen(pStrs[i])+1, pStrs[i+1]);
 		}
 	}
 	if (remove)
 		--*numIngredients;
 	delete[] removeIngredient;
+	delete[] currIng;
 	return 0;
 }
