@@ -94,9 +94,11 @@ void compareauth(AuthorStats** authorInfo, int numAuthors, char file[20]) {
 	for (int i = 0; i < numAuthors; i++) {
 		fileanalyze(currauthor, file);
 		pastdiff =
-			abs(((currauthor->avgwordlength - authorInfo[i]->avgwordlength) * 11) +
+			abs(
+			((currauthor->avgwordlength - authorInfo[i]->avgwordlength) * 11) +
 			((currauthor->typetokratio - authorInfo[i]->typetokratio) * 33) +
-			((currauthor->hapaxlegomana - authorInfo[i]->hapaxlegomana) * 50));
+			((currauthor->hapaxlegomana - authorInfo[i]->hapaxlegomana) * 50)
+			);
 		if (i == 0)
 			currdiff = pastdiff;
 		else if (currdiff > pastdiff)
