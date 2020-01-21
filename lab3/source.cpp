@@ -19,9 +19,12 @@ int main() {
 		"mystery5.txt" };
 	AuthorStats** authorstats = new AuthorStats * [MAX];
 	loadAuthorStats(authorstats, &numauthors);
-	for (int i = 0; i < 6; i++) {
-		compareauth(authorstats, numauthors, file[i]);
-	}
+	compareauth(authorstats, numauthors, file[0]);
+	compareauth(authorstats, numauthors, file[1]);
+	compareauth(authorstats, numauthors, file[2]);
+	compareauth(authorstats, numauthors, file[3]);
+	compareauth(authorstats, numauthors, file[4]);
+	compareauth(authorstats, numauthors, file[5]);
 	for (int i = 0; i < numauthors; i++) {
 		delete[] authorstats[i];
 	}
