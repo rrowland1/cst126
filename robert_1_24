@@ -1,0 +1,175 @@
+// Name: Robert Rowland
+// Assignment name: Lab 3 (add name)
+
+#include<iostream>
+#include<fstream>
+#include<string.h>
+#include<stdio.h>
+#include<conio.h>
+//#include <boost/algorithm/string.hpp> this is for the lower case function
+//#include<ofstream> (might need this later on)
+
+//standard declorations
+using std::cout;
+using std::cin;
+using std::endl;
+
+//special declorations
+using std::ifstream;
+using std::ofstream;
+using std::string;
+
+
+//using std::getline;
+/*
+Pseudo code time:
+
+first step will be getting the user input names, these will be a string. 
+Second step will be setting all charecters to lower case
+thrid step will be seperating all the strings and preparing them for comparisson 
+fourth step will be comparing the strings and removing the ones that aren't nescessary
+the fifth step will be counting the number of words there are
+the sixth step wil be ordering the words from greatest to least (desending order)
+the seventh step will be putting this into a file and meeting the requests
+the eight step will be closing the file with the user name 
+
+*/
+
+//might use this just to keep track of the words
+int WordCount;
+
+
+string SeperateWords(string str);
+string LowerCase(string UserInput);
+
+int main()
+{
+	string outfilename;
+	string infilename;
+
+	//this is the first step 
+
+	//promting the user for the file name----need to include path
+	cout << " What is the file name that we will use? " << endl;
+	cin >> infilename;
+	/*************************************************************/
+
+	//promting the user for the output file name----need to include path
+	cout << endl << " What will be the output filename? " << endl;
+	cin >> outfilename;
+	/*************************************************************/
+
+	//prompting user for an excluded word list file name |include file path| give user option to hit enter if not needed
+	cout << endl << " What will be the excluded word list of file names? (press enter if unnecessary)" << endl;
+	//need to have the option to press enter and then skip this step
+
+
+
+	ifstream fin;
+	ofstream fout;
+	fin.open(infilename);
+	string words[5000];
+	int wordscount[5000];
+	int index = 0;
+	string word;
+	while (!fin.eof())
+	{
+		fin >> word;
+		word = SeperateWords(word);
+		word = LowerCase(word);
+		//word = _strlwr(word);
+		for (int i = 0; i <= index; i++) {
+			if (i == index) {
+				words[i] == word; wordscount[i]++; index++; break;
+			}
+			if(words[i]==word){
+				wordscount[i]++; break;
+			}
+		}
+		for (int i = 0; i <= index;  i++) {
+			cout << words[i] << endl;
+		}
+		//string line
+			//doesn't like getline
+			//this line will seperate all words based on the charecters below
+			//getline(labfile, line, ' ', ',','.','	', ':', ';', '(', ')', '"'); not using this
+		//cout << line << endl;
+	}
+
+	fin.close();
+	fout.open(outfilename);
+	for (int i = 0; i <= index; i++)
+	{
+		fout << words[i] << wordscount << endl;
+	}
+	fout.close();
+}
+
+// Needs an excluded file that displays all the words that shouldn't show up, 1 word per line
+// Capitalization doesnt set words. I could use the function i made for project 2
+
+// need to keep track of all the words that are entered 
+
+//must write a header row to the output csv-colum 1's value should be "word" 
+// column 2's name should be "count" 
+
+//Error conditions :
+//Display an appropriate error messageand return the appropriate exit code for each of these conditions(prefer smaller exit code values).
+//Exit code
+//Meaning
+//1
+//Failure to read input file(file / path doesn't exist, blocked by security, etc.)
+//	2
+//	Unable to write to output file
+//	3
+//	Non - blank excluded word list file name given but failure to read that file
+//	4
+//	Some other condition preventing successful completion occurred
+
+
+string LowerCase(string UserInput)
+{
+	//lower case
+	for (int i = 0; UserInput[i] != '\0'; i++)
+	{
+		if (UserInput[i] >= 'A' && UserInput[i] <= 'Z')
+		{
+			UserInput[i] = UserInput[i] + 32;
+		}
+	}
+	return UserInput; 
+}
+
+string SeperateWords(string str)
+{
+	string word = "";
+	for (int i = 0; i < str.size();i++)
+	{
+		if (str[i] != ' ', ',', '.', '	', ':', ';', '(', ')', '"')
+		{
+			//cout << word << endl;
+			word += str[i];
+		}
+	}
+	//cout << word << endl;
+	return word;
+}
+
+/*void WordCountFunction(int WordCount)
+{
+	clrscr();
+	char strs[100], countw = 0, strw[15];
+	int i, len;
+	cout << "Write a sentence : ";
+	gets(strs);
+	len = strlen(strs);
+	for (i = 0; i < len; i++)
+	{
+		if (strs[i] == ' ')
+		{
+			countw++;
+		}
+	}
+	cout << "Total number of words in the sentence is " << countw + 1;
+	getch();
+}*/
